@@ -166,20 +166,20 @@ function controller:AddQuery()
 	
 
 	local function CheckAnswers() 
-		local blank = false 
+		local blank = true 
 		
 		--[[ Check Blanks ]]--
 		if AnswerOne.Text == "" then 
-			blank = true 
+			blank = false 
 		end
 		if AnswerTwo.Text == "" then 
-			blank = true 
+			blank = false 
 		end
 		if AnswerThree.Text == "" then 
-			blank = true 
+			blank = false 
 		end
 		if AnswerFour.Text == "" then 
-			blank = true 
+			blank = false 
 		end
 		return blank 
 	end 
@@ -192,9 +192,17 @@ function controller:AddQuery()
 		if not debounce then
 			debounce = true 
 			
-			
-			
-			
+			local pass = CheckAnswers()
+			if not pass then 
+				TitleTwo.Text = "Make sure your answers are not blank."
+				task.delay(1, function() 
+					TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
+				end)
+			else 
+				--/Assume that all of them are not blank 
+				
+				
+			end
 		end
 	end)
 	
