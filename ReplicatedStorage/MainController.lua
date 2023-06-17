@@ -412,13 +412,33 @@ function controller.OnQuery()
 
 			local Selects = false 
 			local CanSelect = true 
-			
-			Countdown.Text = "30"
+
+			Countdown.Text = Countdown.Value.Value
 			Countdown.Position = Countdown:GetAttribute("MainTimerPosition")
-			
+
+			coroutine.wrap(function() 
+				repeat 
+					Countdown.Value.Value -= 1 
+					Countdown.Text = Countdown.Value.Value 
+					task.wait(1)					
+				until Countdown.Value.Value < 1 
+				CanSelect = false 
+				Selects = false 
+				Title.Text = "Times up!" 
+				TweenBase(Title, 1, "TextColor3", Color3.fromRGB(218, 95, 95))
+
+				for _,newv in(Frame.Answers:GetChildren()) do
+					TweenBase(newv, 1, "TextTransparency", 1)
+					TweenBase(newv, 1, "BackgroundTransparency", 1)
+				end
+
+				Question:TweenPosition(Question:GetAttribute("StartPosition"), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2)
+			end)()
+
+
 			TweenBase(Countdown, .5, "BackgroundTransparency", 0)
 			TweenBase(Countdown, .7, "TextTransparency", 0)
-			
+
 			for _,v in(Frame.Answers:GetChildren()) do 
 				v.Activated:Connect(function() 
 					if CanSelect then 
@@ -430,7 +450,6 @@ function controller.OnQuery()
 						TweenBase(Submit, 1, "BackgroundTransparency", Submit:GetAttribute("BackgroundTransparency"))
 						Selected.Value = v.Text 
 						Selects = true 
-
 					end
 				end)
 			end
