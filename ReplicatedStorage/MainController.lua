@@ -15,7 +15,6 @@ local UserInputService = Services.UserInputService
 local timeout = ((8 * math.sin(.8)) - .7) 
 
 --//@Legacy Abbreviations 
-local mouse : Mouse = game.Players.LocalPlayer:GetMouse() 
 local camera = workspace.CurrentCamera
 
 --//@Global Dependencies
@@ -284,9 +283,46 @@ function controller:AddQuery()
 
 end
 
+function controller:CloseQueries() 
+	--[[ Interfacing ]] -- 
+	local Gui = game.Players.LocalPlayer.PlayerGui:WaitForChild("InputQuestionsGui", timeout)
+	local Frame = Gui.MainFrame 
+	local Input = Frame.Input 
+	local Submit = Frame.Submit 
+	local Finish = Frame.Finish 
+	local Questions = Frame.Questions 
+
+	-- [[ Titles ]] -- 
+	local Title = Frame.Title 
+	local TitleTwo = Frame.TitleTwo 
+
+	-- [[ Answers ]] --
+	local Answers = Frame.Answers 
+	local AnswerOne = Answers.AnswerOne
+	local AnswerTwo = Answers.AnswerTwo
+	local AnswerThree = Answers.AnswerThree
+	local AnswerFour = Answers.AnswerFour
+
+
+	for _,v in(Frame:GetDescendants()) do 
+		if v:IsA("TextButton") or v:IsA("TextLabel") then 
+			TweenBase(v, 1, "TextTransparency", 1)
+			TweenBase(v, 1, "BackgroundTransparency", 1)
+			
+		elseif v:IsA("TextBox") then 
+			TweenBase(v, 1, "TextTransparency", 1)
+			TweenBase(v, 1, "BackgroundTransparency", 1)
+		end
+	end
+	
+	TweenBase(Frame, 1, "BackgroundTransparency", 1)
+	task.delay(.8, function() Gui.Enabled = false; end)
+
+end
+
 function controller.OnQuery() 
 	--[[ Framework ]]--
-	local QueryGui = game.Players.LocalPlayer.PlayerGui.QuestionAsk
+	local QueryGui = game.Players.LocalPlayer.PlayerGui:WaitForChild("QuestionAsk")
 	local Frame = QueryGui.MainFrame
 	local One = Frame.One
 	local Two = Frame.Two
@@ -295,26 +331,55 @@ function controller.OnQuery()
 	local Submit = Frame.Submit
 	local Title = Frame.Title
 	local Question = Frame.Question
-	
+	local Countdown = Frame.Countdown
+
 	for _,v in(QueryGui:GetDescendants()) do 
 		if v:IsA("TextLabel") or v:IsA("TextButton") then 
 			v.TextTransparency = 1 
 			v:SetAttribute("BackgroundTransparency", v.BackgroundTransparency)
+			--
+			v.BackgroundTransparency = 1 
 		end
 	end
 
-	remote.OnClientEvent:Connect(function(action, argument1, argument2)
+	Frame.BackgroundTransparency = 1 
+
+
+	remote.OnClientEvent:Connect(function(action, question, argument2)
 		if action == "QueryPlayer" then
+			QueryGui.Enabled = true 
 			
+			TweenBase(Frame, 1, "BackgroundTransparency", .3)
+			task.wait(.5)
+
 			TweenBase(Title, 1, "TextTransparency", 0)
 			TweenBase(Title, 1, "BackgroundTransparency", Title:GetAttribute("BackgroundTransparency"))
+			Question.Text = question 
+			Question.Position = Question:GetAttribute("StartPosition")
+			TweenBase(Question, 1, "TextTransparency", 0)
+			TweenBase(Question, 1, "BackgroundTransparency", Question:GetAttribute("BackgroundTransparency"))
+			task.wait(2)
+			Question:TweenPosition(Question:GetAttribute("EndPosition"), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, 1)
+			task.wait(.5)
+			Countdown.Text = "4"
+			TweenBase(Countdown, .5, "BackgroundTransparency", 0)
+			TweenBase(Countdown, .7, "TextTransparency", 0)
+			task.wait(1)
+			Countdown.Text = "3"
+			task.wait(1)
+			Countdown.Text = "2"
+			task.wait(1)
+			Countdown.Text = "1"
+			task.wait(1)
+			TweenBase(Countdown, .5, "BackgroundTransparency", 1)
+			TweenBase(Countdown, .7, "TextTransparency", 1)
 		end
 	end)
 end
 
 --//@Server Module Identifiers 
-function controller:QueryPlayer(player)
-
+function controller:QueryPlayer(player, question)
+	remote:FireClient(player, "QueryPlayer", question)
 end 
 
 return controller
