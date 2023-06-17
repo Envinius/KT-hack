@@ -412,7 +412,9 @@ function controller.OnQuery()
 
 			local Selects = false 
 			local CanSelect = true 
-
+			
+			Countdown.Value.Value = 15 
+			-- 
 			Countdown.Text = Countdown.Value.Value
 			Countdown.Position = Countdown:GetAttribute("MainTimerPosition")
 
@@ -431,8 +433,37 @@ function controller.OnQuery()
 					TweenBase(newv, 1, "TextTransparency", 1)
 					TweenBase(newv, 1, "BackgroundTransparency", 1)
 				end
+				TweenBase(Submit, 1, "TextTransparency", 1)
+				TweenBase(Submit, 1, "BackgroundTransparency", 1)
+				--task.delay(1, function() Submit.Visible = false end)
+				
+				TweenBase(Countdown, .5, "BackgroundTransparency", 1)
+				TweenBase(Countdown, .7, "TextTransparency", 1)
+				
+				TweenBase(Question, 1, "TextColor3", Color3.fromRGB(73, 218, 206))
 
-				Question:TweenPosition(Question:GetAttribute("StartPosition"), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 2)
+
+				Question:TweenPosition(Question:GetAttribute("StartPosition"), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1.5)
+				task.wait(1)	
+				local answer  
+				for _,v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
+					if v.Value then 
+						answer = v.Name 
+					end
+				end
+				
+				task.wait(1)
+				Question.Text = "The correct answer is: " .. answer 
+				TweenBase(Question, 1, "TextColor3", Color3.fromRGB(75, 218, 87))
+
+				task.wait(2)
+				if Selected.Value == answer then 
+					Question.Text = "You got this correct!" 
+					TweenBase(Question, 1, "TextColor3", Color3.fromRGB(106, 218, 80))
+				else 
+					Question.Text = "You got this incorrect." 
+					TweenBase(Question, 1, "TextColor3", Color3.fromRGB(218, 32, 32))
+				end
 			end)()
 
 
