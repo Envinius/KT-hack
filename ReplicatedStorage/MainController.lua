@@ -464,6 +464,14 @@ function controller.OnQuery()
 					Question.Text = "You got this incorrect." 
 					TweenBase(Question, 1, "TextColor3", Color3.fromRGB(218, 32, 32))
 				end
+				task.wait(1)
+				TweenBase(Title, 1, "TextTransparency", 1)
+				TweenBase(Title, 1, "BackgroundTransparency", 1)
+				task.wait(1)
+				TweenBase(Question, 1, "TextTransparency", 1)
+				TweenBase(Question, 1, "BackgroundTransparency", 1)
+				--
+				TweenBase(Frame, 1, "BackgroundTransparency", 1)
 			end)()
 
 
