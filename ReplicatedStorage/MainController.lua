@@ -100,7 +100,7 @@ function controller.SetupQueries()
 	local AnswerTwo = Answers.AnswerTwo
 	local AnswerThree = Answers.AnswerThree
 	local AnswerFour = Answers.AnswerFour
-	
+
 
 	for _,v in(Frame:GetDescendants()) do 
 		if v:IsA("TextButton") or v:IsA("TextLabel") then 
@@ -114,12 +114,12 @@ function controller.SetupQueries()
 			v.TextTransparency = 1 
 		end
 	end
-	
+
 
 	for _,v in(Frame:GetDescendants()) do 
 		if v:IsA("TextButton") or v:IsA("TextLabel") then 
 			TweenBase(v, 1, "TextTransparency", 0)
-			
+
 			if v:GetAttribute("BackgroundTransparency") then 
 				TweenBase(v, 1, "BackgroundTransparency", v:GetAttribute("BackgroundTransparency"))
 			else 
@@ -128,7 +128,7 @@ function controller.SetupQueries()
 			--
 		elseif v:IsA("TextBox") then 
 			TweenBase(v, 1, "TextTransparency", 0)
-			
+
 			if v:GetAttribute("BackgroundTransparency") then 
 				TweenBase(v, 1, "BackgroundTransparency", v:GetAttribute("BackgroundTransparency"))
 			else 
@@ -137,7 +137,7 @@ function controller.SetupQueries()
 			--
 		end
 	end
-	
+
 end 
 
 function controller:AddQuery() 
@@ -163,11 +163,11 @@ function controller:AddQuery()
 	local AnswerTwo = Answers.AnswerTwo
 	local AnswerThree = Answers.AnswerThree
 	local AnswerFour = Answers.AnswerFour
-	
+
 
 	local function CheckAnswers() 
 		local blank = true 
-		
+
 		--[[ Check Blanks ]]--
 		if AnswerOne.Text == "" then 
 			blank = false 
@@ -183,29 +183,27 @@ function controller:AddQuery()
 		end
 		return blank 
 	end 
-	
 
 
-	
+
+
 	local debounce = false 
-	Submit.Activated:Connect(function()
-		if not debounce then
-			debounce = true 
-			
-			local pass = CheckAnswers()
-			if not pass then 
-				TitleTwo.Text = "Make sure your answers are not blank."
-				task.delay(1, function() 
-					TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
-				end)
-			else 
-				--/Assume that all of them are not blank 
-				
-				
-			end
+	if not debounce then
+		debounce = true 
+
+		local pass = CheckAnswers()
+		if not pass then 
+			TitleTwo.Text = "Make sure your answers are not blank."
+			task.delay(1, function() 
+				TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
+			end)
+		else 
+			--/Assume that all of them are not blank 
+
+
 		end
-	end)
-	
+	end
+
 end
 
 
