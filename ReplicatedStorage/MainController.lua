@@ -77,7 +77,7 @@ camShake:Start()
 
 --//@Client Module Identifiers  
 
-function controller.AddQuery() 
+function controller.SetupQueries() 
 	--/Character Dependencies 
 	local player = game.Players.LocalPlayer 
 	local character = player.Character or player.CharacterAdded:Wait() 
@@ -85,9 +85,42 @@ function controller.AddQuery()
 	--/Local Dependencies 
 
 	--[[ Interfacing ]] -- 
-	local Gui = player.PlayerGui:WaitForChild("InputQuestionsGui")
+	local Gui = player.PlayerGui:WaitForChild("InputQuestionsGui", timeout)
 	local Frame = Gui.MainFrame 
+	local Input = Frame.Input 
+	local Submit = Frame.Submit 
+
+	-- [[ Titles ]] -- 
+	local Title = Frame.Title 
+	local TitleTwo = Frame.TitleTwo 
+
+	-- [[ Answers ]] --
+	local Answers = Frame.Answers 
+	local AnswerOne = Answers.AnswerOne
+	local AnswerTwo = Answers.AnswerTwo
+	local AnswerThree = Answers.AnswerThree
+	local AnswerFour = Answers.AnswerFour
+	
+
+	for _,v in(Frame:GetDescendants()) do 
+		if v:IsA("TextButton") or v:IsA("TextLabel") then 
+			v:SetAttribute("BackgroundTransparency", v.BackgroundTransparency)
+			-- 
+			v.TextTransparency = 1 
+			v.BackgroundTransparency = 1 
+		elseif v:IsA("TextBox") then 
+			v:SetAttribute("BackgroundTransparency", v.BackgroundTransparency)
+			-- 
+			v.TextTransparency = 1 
+		end
+	end
+	
+	
 end 
+
+function controller:AddQuery() 
+	
+end
 
 
 
