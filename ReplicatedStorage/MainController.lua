@@ -3,19 +3,20 @@ local controller = {}
 
 --@Services 
 local Services = setmetatable({}, {
-    __index = function(self, Service)
-        return game:GetService(Service)
-    end,
+	__index = function(self, Service)
+		return game:GetService(Service)
+	end,
 })
 --//ServiceDiplomacies 
-local TweenService = Services.TweenService 
+local TweenService, Tweens = Services.TweenService, Services.TweenService 
 local UserInputService = Services.UserInputService 
 
 --@Global Timeouts 
 local timeout = ((8 * math.sin(.8)) - .7) 
 
 --//@Legacy Abbreviations 
-local mouse : Mouse = player:GetMouse() 
+local mouse : Mouse = game.Players.LocalPlayer:GetMouse() 
+local camera = workspace.CurrentCamera
 
 --//@Local Functions 
 local function zoomCam(amount : number , duration : number) 
@@ -40,8 +41,8 @@ end
 
 local function getMouseHit()
 	local raycastParams = RaycastParams.new()
-	raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-	raycastParams.FilterDescendantsInstances = {character}
+	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+	raycastParams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
 	local mouseLocation = UserInputService:GetMouseLocation()
 
 	local viewportPointRay = camera:ViewportPointToRay(mouseLocation.X, mouseLocation.Y)
@@ -53,8 +54,8 @@ end
 
 local function getMousePos()	
 	local raycastParams = RaycastParams.new()
-	raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-	raycastParams.FilterDescendantsInstances = {character}
+	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+	raycastParams.FilterDescendantsInstances = {game.Players.LocalPlayer.Character}
 
 	local mouseLocation = UserInputService:GetMouseLocation()
 	local viewportPointRay = camera:ViewportPointToRay(mouseLocation.X, mouseLocation.Y)
@@ -73,8 +74,21 @@ end)
 camShake:Start()
 --camShake:Shake(CameraShaker.Presets[Arg])
 
---//@Main Diplomacies 
-local 
+
+--//@Client Module Identifiers  
+
+function controller.AddQuery() 
+	--/Character Dependencies 
+	local player = game.Players.LocalPlayer 
+	local character = player.Character or player.CharacterAdded:Wait() 
+
+	--/Local Dependencies 
+
+	--[[ Interfacing ]] -- 
+	local Gui = player.PlayerGui:WaitForChild("InputQuestionsGui")
+	local Frame = Gui.MainFrame 
+end 
+
 
 
 return controller 
