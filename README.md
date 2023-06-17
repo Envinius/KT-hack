@@ -1,2 +1,4 @@
-# KT hack
- kt hack for this thing
+KTHack submission file
+
+#Project Details: 
+
