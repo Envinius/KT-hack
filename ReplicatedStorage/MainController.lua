@@ -332,7 +332,8 @@ function controller.OnQuery()
 	local Title = Frame.Title
 	local Question = Frame.Question
 	local Countdown = Frame.Countdown
-
+	local Selected = Frame.Selected
+	
 	for _,v in(QueryGui:GetDescendants()) do 
 		if v:IsA("TextLabel") or v:IsA("TextButton") then 
 			v.TextTransparency = 1 
@@ -341,7 +342,6 @@ function controller.OnQuery()
 			v.BackgroundTransparency = 1 
 		end
 	end
-
 	Frame.BackgroundTransparency = 1 
 
 
@@ -405,7 +405,19 @@ function controller.OnQuery()
 
 			TweenBase(Four, 1, "TextTransparency", 0)
 			TweenBase(Four, 1, "BackgroundTransparency", Four:GetAttribute("BackgroundTransparency"))
-
+			
+			for _,v in(Frame.Answers:GetChildren()) do 
+				v.Activated:Connect(function() 
+					for _,v in(Frame.Answers:GetChildren()) do 
+						TweenBase(v, 1, "TextColor3", Color3.fromRGB(255, 56, 56))
+					end
+					TweenBase(v, 1, "TextColor3", Color3.fromRGB(144, 255, 148))
+					TweenBase(Submit, 1, "TextTransparency", 0)
+					TweenBase(Submit, 1, "BackgroundTransparency", Submit:GetAttribute("BackgroundTransparency"))
+				end)
+			end
+			
+			
 		end
 	end)
 end
