@@ -333,7 +333,7 @@ function controller.OnQuery()
 	local Question = Frame.Question
 	local Countdown = Frame.Countdown
 	local Selected = Frame.Selected
-	
+
 	for _,v in(QueryGui:GetDescendants()) do 
 		if v:IsA("TextLabel") or v:IsA("TextButton") then 
 			v.TextTransparency = 1 
@@ -373,16 +373,16 @@ function controller.OnQuery()
 			task.wait(1)
 			TweenBase(Countdown, .5, "BackgroundTransparency", 1)
 			TweenBase(Countdown, .7, "TextTransparency", 1)
-			
+
 			--[[Setting the Answers Up]]--
 			for i,v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
 				if not v:GetAttribute("Assigned") then 
 					v:SetAttribute("Assigned", i)
 				end
 			end
-			
+
 			task.wait(.5)
-			
+
 			for i,v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
 				if v:GetAttribute("Assigned") then 
 					if v:GetAttribute("Assigned") == 1 then 
@@ -396,7 +396,7 @@ function controller.OnQuery()
 					end
 				end
 			end
-			
+
 			task.wait(.7)
 			TweenBase(One, 1, "TextTransparency", 0)
 			TweenBase(One, 1, "BackgroundTransparency", One:GetAttribute("BackgroundTransparency"))
@@ -409,9 +409,16 @@ function controller.OnQuery()
 
 			TweenBase(Four, 1, "TextTransparency", 0)
 			TweenBase(Four, 1, "BackgroundTransparency", Four:GetAttribute("BackgroundTransparency"))
-			
+
 			local Selects = false 
 			local CanSelect = true 
+			
+			Countdown.Text = "30"
+			Countdown.Position = Countdown:GetAttribute("MainTimerPosition")
+			
+			TweenBase(Countdown, .5, "BackgroundTransparency", 0)
+			TweenBase(Countdown, .7, "TextTransparency", 0)
+			
 			for _,v in(Frame.Answers:GetChildren()) do 
 				v.Activated:Connect(function() 
 					if CanSelect then 
@@ -423,36 +430,40 @@ function controller.OnQuery()
 						TweenBase(Submit, 1, "BackgroundTransparency", Submit:GetAttribute("BackgroundTransparency"))
 						Selected.Value = v.Text 
 						Selects = true 
-						
+
 					end
 				end)
 			end
-			
+
 			Submit.Activated:Connect(function()
 				if Selects then 
 					CanSelect = false 
 					Selects = false 
-					
+
 					TweenBase(Submit, 1, "TextTransparency", 1)
 					TweenBase(Submit, 1, "BackgroundTransparency", 1)
 
 					Title.Text = "Answer Locked in: " 
 					TweenBase(Title, 1, "TextColor3", Color3.fromRGB(181, 218, 177))
-					
+
 					for _,newv in(Frame.Answers:GetChildren()) do
 						if newv.Text ~= Selected.Value then 
 							TweenBase(newv, 1, "TextTransparency", 1)
+							task.delay(1.4, function() 
+								TweenBase(newv, 1, "BackgroundTransparency", 1)
+							end) 
+
 						end 
 					end
-					
+
 					-- 
 					for _,v in(Frame.Answers:GetChildren()) do 
 						v:TweenPosition(Frame.Answers:GetAttribute("EndPositions"), Enum.EasingDirection.Out, Enum.EasingStyle.Linear, 1.5)
 					end
-					
+
 				end
 			end)
-			
+
 		end
 	end)
 end
