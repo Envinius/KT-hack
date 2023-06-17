@@ -373,17 +373,26 @@ function controller.OnQuery()
 			task.wait(1)
 			TweenBase(Countdown, .5, "BackgroundTransparency", 1)
 			TweenBase(Countdown, .7, "TextTransparency", 1)
-
-			for _, texts in(Frame.Answers:GetChildren()) do 
-				for i, v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
-					if texts.Text == "Example" then 
-						texts.Text = v.Name 
-						if v.Value == true then 
-							texts:SetAttribute("Answer", true)
-						end
+			
+			--[[Setting the Answers Up]]--
+			for i,v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
+				if not v:GetAttribute("Assigned") then 
+					v:SetAttribute("Assigned", math.random(i))
+				end
+				if v:GetAttribute("Assigned") then 
+					if v:GetAttribute("Assigned") == 1 then 
+						One.Text = v.Name 
+					elseif v:GetAttribute("Assigned") == 2 then 
+						Two.Text = v.Name 
+					elseif v:GetAttribute("Assigned") == 3 then 
+						Three.Text = v.Name
+					elseif v:GetAttribute("Assigned") == 4 then 
+						Four.Text = v.Name
 					end
 				end
 			end
+			
+			
 			task.wait(.7)
 			TweenBase(One, 1, "TextTransparency", 0)
 			TweenBase(One, 1, "BackgroundTransparency", One:GetAttribute("BackgroundTransparency"))
