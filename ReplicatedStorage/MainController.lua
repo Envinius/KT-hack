@@ -308,13 +308,13 @@ function controller:CloseQueries()
 		if v:IsA("TextButton") or v:IsA("TextLabel") then 
 			TweenBase(v, 1, "TextTransparency", 1)
 			TweenBase(v, 1, "BackgroundTransparency", 1)
-			
+
 		elseif v:IsA("TextBox") then 
 			TweenBase(v, 1, "TextTransparency", 1)
 			TweenBase(v, 1, "BackgroundTransparency", 1)
 		end
 	end
-	
+
 	TweenBase(Frame, 1, "BackgroundTransparency", 1)
 	task.delay(.8, function() Gui.Enabled = false; end)
 
@@ -324,10 +324,10 @@ function controller.OnQuery()
 	--[[ Framework ]]--
 	local QueryGui = game.Players.LocalPlayer.PlayerGui:WaitForChild("QuestionAsk")
 	local Frame = QueryGui.MainFrame
-	local One = Frame.One
-	local Two = Frame.Two
-	local Three = Frame.Three 
-	local Four = Frame.Four
+	local One = Frame.Answers.One
+	local Two = Frame.Answers.Two
+	local Three = Frame.Answers.Three 
+	local Four = Frame.Answers.Four
 	local Submit = Frame.Submit
 	local Title = Frame.Title
 	local Question = Frame.Question
@@ -348,7 +348,7 @@ function controller.OnQuery()
 	remote.OnClientEvent:Connect(function(action, question, argument2)
 		if action == "QueryPlayer" then
 			QueryGui.Enabled = true 
-			
+
 			TweenBase(Frame, 1, "BackgroundTransparency", .3)
 			task.wait(.5)
 
@@ -373,6 +373,30 @@ function controller.OnQuery()
 			task.wait(1)
 			TweenBase(Countdown, .5, "BackgroundTransparency", 1)
 			TweenBase(Countdown, .7, "TextTransparency", 1)
+
+			for _, texts in(Frame.Answers:GetChildren()) do 
+				for i, v in(game.ReplicatedStorage.MainController.Questions[question]:GetChildren()) do 
+					if texts.Text == "Example" then 
+						texts.Text = v.Name 
+						if v.Value == true then 
+							texts:SetAttribute("Answer", true)
+						end
+					end
+				end
+			end
+			task.wait(.7)
+			TweenBase(One, 1, "TextTransparency", 0)
+			TweenBase(One, 1, "BackgroundTransparency", One:GetAttribute("BackgroundTransparency"))
+
+			TweenBase(Two, 1, "TextTransparency", 0)
+			TweenBase(Two, 1, "BackgroundTransparency", Two:GetAttribute("BackgroundTransparency"))
+
+			TweenBase(Three, 1, "TextTransparency", 0)
+			TweenBase(Three, 1, "BackgroundTransparency", Three:GetAttribute("BackgroundTransparency"))
+
+			TweenBase(Four, 1, "TextTransparency", 0)
+			TweenBase(Four, 1, "BackgroundTransparency", Four:GetAttribute("BackgroundTransparency"))
+
 		end
 	end)
 end
