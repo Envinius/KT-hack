@@ -91,6 +91,8 @@ function controller.SetupQueries()
 	local Frame = Gui.MainFrame 
 	local Input = Frame.Input 
 	local Submit = Frame.Submit 
+	local Finish = Frame.Finish 
+	local Questions = Frame.Questions 
 
 	-- [[ Titles ]] -- 
 	local Title = Frame.Title 
@@ -154,7 +156,9 @@ function controller:AddQuery()
 	local Frame = Gui.MainFrame 
 	local Input = Frame.Input 
 	local Submit = Frame.Submit 
-
+	local Finish = Frame.Finish 
+	local Questions = Frame.Questions 
+	
 	-- [[ Titles ]] -- 
 	local Title = Frame.Title 
 	local TitleTwo = Frame.TitleTwo 
@@ -192,14 +196,19 @@ function controller:AddQuery()
 
 		if Input.Text == "" then 
 			TitleTwo.Text = "Make sure your question isn't blank."
+			TitleTwo.TextColor3 = Color3.fromRGB(255, 111, 111)
+
 			task.delay(1, function() 
+				TitleTwo.TextColor3 = Color3.fromRGB(255, 255, 255)
 				TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
 			end)
 		else 
 			local pass = CheckAnswers()
 			if not pass then 
 				TitleTwo.Text = "Make sure your answers are not blank."
+				TitleTwo.TextColor3 = Color3.fromRGB(255, 111, 111)
 				task.delay(1, function() 
+					TitleTwo.TextColor3 = Color3.fromRGB(255, 255, 255)
 					TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
 				end)
 			else 
@@ -237,7 +246,12 @@ function controller:AddQuery()
 				TweenBase(AnswerThree, 1, "TextTransparency", 1)
 				TweenBase(AnswerFour, 1, "TextTransparency", 1)
 				TweenBase(Input, 1, "TextTransparency", 1)
-
+				
+				if #game.ReplicatedStorage.MainController.Questions:GetChildren() == 1 then 
+					Questions.Text = #game.ReplicatedStorage.MainController.Questions:GetChildren() .. " question made."
+				else 
+					Questions.Text = #game.ReplicatedStorage.MainController.Questions:GetChildren() .. " questions made."
+				end
 				task.delay(1, function() 
 					
 					AnswerOne.Text = ""
@@ -246,7 +260,7 @@ function controller:AddQuery()
 					AnswerFour.Text = ""
 					Input.Text = ""
 					-- [[ Restart ]] --
-					TweenBase(Input, 1, "TextTransparency", 1)
+					TweenBase(Input, 1, "TextTransparency", 0)
 
 					TweenBase(AnswerOne, 1, "TextTransparency", 0)
 					TweenBase(AnswerTwo, 1, "TextTransparency", 0)
