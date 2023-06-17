@@ -115,6 +115,28 @@ function controller.SetupQueries()
 		end
 	end
 	
+
+	for _,v in(Frame:GetDescendants()) do 
+		if v:IsA("TextButton") or v:IsA("TextLabel") then 
+			TweenBase(v, 1, "TextTransparency", 0)
+			
+			if v:GetAttribute("BackgroundTransparency") then 
+				TweenBase(v, 1, "BackgroundTransparency", v:GetAttribute("BackgroundTransparency"))
+			else 
+				TweenBase(v, 1, "BackgroundTransparency", 0)
+			end
+			--
+		elseif v:IsA("TextBox") then 
+			TweenBase(v, 1, "TextTransparency", 0)
+			
+			if v:GetAttribute("BackgroundTransparency") then 
+				TweenBase(v, 1, "BackgroundTransparency", v:GetAttribute("BackgroundTransparency"))
+			else 
+				TweenBase(v, 1, "BackgroundTransparency", 0)
+			end
+			--
+		end
+	end
 	
 end 
 
