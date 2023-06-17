@@ -66,14 +66,14 @@ local function getMousePos()
 	--//Shift/Viewport Ray @: return nil, (viewportPointRay.Origin + viewportPointRay.Direction * 1000)
 end
 
-
+--[[
 local CameraShaker = require(game:GetService('ReplicatedStorage'):WaitForChild("CameraShaker"));
 local camShake = CameraShaker.new(Enum.RenderPriority.Camera.Value, function(shakeCf)
 	camera.CFrame = camera.CFrame * shakeCf
 end)
 camShake:Start()
 --camShake:Shake(CameraShaker.Presets[Arg])
-
+]]
 
 --//@Client Module Identifiers  
 
@@ -86,6 +86,8 @@ function controller.SetupQueries()
 
 	--[[ Interfacing ]] -- 
 	local Gui = player.PlayerGui:WaitForChild("InputQuestionsGui", timeout)
+	Gui.Enabled = true 
+
 	local Frame = Gui.MainFrame 
 	local Input = Frame.Input 
 	local Submit = Frame.Submit 
@@ -163,7 +165,7 @@ function controller:AddQuery()
 	local AnswerTwo = Answers.AnswerTwo
 	local AnswerThree = Answers.AnswerThree
 	local AnswerFour = Answers.AnswerFour
-	
+
 	local debounce = false 
 
 	local function CheckAnswers() 
@@ -188,39 +190,78 @@ function controller:AddQuery()
 	if not debounce then
 		debounce = true 
 
-		local pass = CheckAnswers()
-		if not pass then 
-			TitleTwo.Text = "Make sure your answers are not blank."
+		if Input.Text == "" then 
+			TitleTwo.Text = "Make sure your question isn't blank."
 			task.delay(1, function() 
 				TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
 			end)
 		else 
-			--/Assume that all of them are not blank 
-			local Question = Instance.new("Folder")
-			Question.Parent = game.ReplicatedStorage.MainController.Questions
-			Question.Name = Input.Text 
-			
-			--[[ Create Answers for the questions ]] --  
-			local Answer1 = Instance.new("BoolValue")
-			Answer1.Parent = Question 
-			Answer1.Name = AnswerOne.Text 
-			Answer1.Value = true 
-			-- 
-			local Answer2 = Instance.new("BoolValue")
-			Answer2.Parent = Question 
-			Answer2.Name = AnswerTwo.Text 
-			Answer2.Value = false 
-			-- 
-			local Answer3 = Instance.new("BoolValue")
-			Answer3.Parent = Question 
-			Answer3.Name = AnswerThree.Text
-			Answer3.Value = false  
-			-- 
-			local Answer4 = Instance.new("BoolValue")
-			Answer4.Parent = Question
-			Answer4.Name = AnswerFour.Text
-			Answer4.Value = false 
+			local pass = CheckAnswers()
+			if not pass then 
+				TitleTwo.Text = "Make sure your answers are not blank."
+				task.delay(1, function() 
+					TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
+				end)
+			else 
+				--/Assume that all of them are not blank 
+				local Question = Instance.new("Folder")
+				Question.Parent = game.ReplicatedStorage.MainController.Questions
+				Question.Name = Input.Text 
 
+				--[[ Create Answers for the questions ]] --  
+				local Answer1 = Instance.new("BoolValue")
+				Answer1.Parent = Question 
+				Answer1.Name = AnswerOne.Text 
+				Answer1.Value = true 
+				-- 
+				local Answer2 = Instance.new("BoolValue")
+				Answer2.Parent = Question 
+				Answer2.Name = AnswerTwo.Text 
+				Answer2.Value = false 
+				-- 
+				local Answer3 = Instance.new("BoolValue")
+				Answer3.Parent = Question 
+				Answer3.Name = AnswerThree.Text
+				Answer3.Value = false  
+				-- 
+				local Answer4 = Instance.new("BoolValue")
+				Answer4.Parent = Question
+				Answer4.Name = AnswerFour.Text
+				Answer4.Value = false 
+
+				TitleTwo.Text = "Question successfully created!"
+				TitleTwo.TextColor3 = Color3.fromRGB(134, 255, 134)
+
+				TweenBase(AnswerOne, 1, "TextTransparency", 1)
+				TweenBase(AnswerTwo, 1, "TextTransparency", 1)
+				TweenBase(AnswerThree, 1, "TextTransparency", 1)
+				TweenBase(AnswerFour, 1, "TextTransparency", 1)
+				TweenBase(Input, 1, "TextTransparency", 1)
+
+				task.delay(1, function() 
+					
+					AnswerOne.Text = ""
+					AnswerTwo.Text = ""
+					AnswerThree.Text = ""
+					AnswerFour.Text = ""
+					Input.Text = ""
+					-- [[ Restart ]] --
+					TweenBase(Input, 1, "TextTransparency", 1)
+
+					TweenBase(AnswerOne, 1, "TextTransparency", 0)
+					TweenBase(AnswerTwo, 1, "TextTransparency", 0)
+					TweenBase(AnswerThree, 1, "TextTransparency", 0)
+					TweenBase(AnswerFour, 1, "TextTransparency", 0)
+					
+					TweenBase(TitleTwo, 1, "TextTransparency", 1)
+					task.delay(1, function() 
+						TweenBase(TitleTwo, 1, "TextTransparency", 0)
+						TitleTwo.TextColor3 = Color3.fromRGB(255, 255, 255)
+						TitleTwo.Text = "Enter your answers to the question, make the first one correct." 
+					end)
+				end) 
+
+			end
 		end
 	end
 
