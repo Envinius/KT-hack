@@ -163,7 +163,8 @@ function controller:AddQuery()
 	local AnswerTwo = Answers.AnswerTwo
 	local AnswerThree = Answers.AnswerThree
 	local AnswerFour = Answers.AnswerFour
-
+	
+	local debounce = false 
 
 	local function CheckAnswers() 
 		local blank = true 
@@ -184,10 +185,6 @@ function controller:AddQuery()
 		return blank 
 	end 
 
-
-
-
-	local debounce = false 
 	if not debounce then
 		debounce = true 
 
@@ -199,7 +196,30 @@ function controller:AddQuery()
 			end)
 		else 
 			--/Assume that all of them are not blank 
-
+			local Question = Instance.new("Folder")
+			Question.Parent = game.ReplicatedStorage.MainController.Questions
+			Question.Name = Input.Text 
+			
+			--[[ Create Answers for the questions ]] --  
+			local Answer1 = Instance.new("BoolValue")
+			Answer1.Parent = Question 
+			Answer1.Name = AnswerOne.Text 
+			Answer1.Value = true 
+			-- 
+			local Answer2 = Instance.new("BoolValue")
+			Answer2.Parent = Question 
+			Answer2.Name = AnswerTwo.Text 
+			Answer2.Value = false 
+			-- 
+			local Answer3 = Instance.new("BoolValue")
+			Answer3.Parent = Question 
+			Answer3.Name = AnswerThree.Text
+			Answer3.Value = false  
+			-- 
+			local Answer4 = Instance.new("BoolValue")
+			Answer4.Parent = Question
+			Answer4.Name = AnswerFour.Text
+			Answer4.Value = false 
 
 		end
 	end
