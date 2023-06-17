@@ -18,6 +18,9 @@ local timeout = ((8 * math.sin(.8)) - .7)
 local mouse : Mouse = game.Players.LocalPlayer:GetMouse() 
 local camera = workspace.CurrentCamera
 
+--//@Global Dependencies
+local remote = script.Remote
+
 --//@Local Functions 
 local function zoomCam(amount : number , duration : number) 
 	local tween = Tweens:Create(
@@ -158,7 +161,7 @@ function controller:AddQuery()
 	local Submit = Frame.Submit 
 	local Finish = Frame.Finish 
 	local Questions = Frame.Questions 
-	
+
 	-- [[ Titles ]] -- 
 	local Title = Frame.Title 
 	local TitleTwo = Frame.TitleTwo 
@@ -246,14 +249,14 @@ function controller:AddQuery()
 				TweenBase(AnswerThree, 1, "TextTransparency", 1)
 				TweenBase(AnswerFour, 1, "TextTransparency", 1)
 				TweenBase(Input, 1, "TextTransparency", 1)
-				
+
 				if #game.ReplicatedStorage.MainController.Questions:GetChildren() == 1 then 
 					Questions.Text = #game.ReplicatedStorage.MainController.Questions:GetChildren() .. " question made."
 				else 
 					Questions.Text = #game.ReplicatedStorage.MainController.Questions:GetChildren() .. " questions made."
 				end
 				task.delay(1, function() 
-					
+
 					AnswerOne.Text = ""
 					AnswerTwo.Text = ""
 					AnswerThree.Text = ""
@@ -266,7 +269,7 @@ function controller:AddQuery()
 					TweenBase(AnswerTwo, 1, "TextTransparency", 0)
 					TweenBase(AnswerThree, 1, "TextTransparency", 0)
 					TweenBase(AnswerFour, 1, "TextTransparency", 0)
-					
+
 					TweenBase(TitleTwo, 1, "TextTransparency", 1)
 					task.delay(1, function() 
 						TweenBase(TitleTwo, 1, "TextTransparency", 0)
@@ -281,6 +284,37 @@ function controller:AddQuery()
 
 end
 
+function controller.OnQuery() 
+	--[[ Framework ]]--
+	local QueryGui = game.Players.LocalPlayer.PlayerGui.QuestionAsk
+	local Frame = QueryGui.MainFrame
+	local One = Frame.One
+	local Two = Frame.Two
+	local Three = Frame.Three 
+	local Four = Frame.Four
+	local Submit = Frame.Submit
+	local Title = Frame.Title
+	local Question = Frame.Question
+	
+	for _,v in(QueryGui:GetDescendants()) do 
+		if v:IsA("TextLabel") or v:IsA("TextButton") then 
+			v.TextTransparency = 1 
+			v:SetAttribute("BackgroundTransparency", v.BackgroundTransparency)
+		end
+	end
 
+	remote.OnClientEvent:Connect(function(action, argument1, argument2)
+		if action == "QueryPlayer" then
+			
+			TweenBase(Title, 1, "TextTransparency", 0)
+			TweenBase(Title, 1, "BackgroundTransparency", Title:GetAttribute("BackgroundTransparency"))
+		end
+	end)
+end
 
-return controller 
+--//@Server Module Identifiers 
+function controller:QueryPlayer(player)
+
+end 
+
+return controller
