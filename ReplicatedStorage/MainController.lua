@@ -141,6 +141,62 @@ function controller.SetupQueries()
 end 
 
 function controller:AddQuery() 
+	--/Character Dependencies 
+	local player = game.Players.LocalPlayer 
+	local character = player.Character or player.CharacterAdded:Wait() 
+
+	--/Local Dependencies 
+
+	--[[ Interfacing ]] -- 
+	local Gui = player.PlayerGui:WaitForChild("InputQuestionsGui", timeout)
+	local Frame = Gui.MainFrame 
+	local Input = Frame.Input 
+	local Submit = Frame.Submit 
+
+	-- [[ Titles ]] -- 
+	local Title = Frame.Title 
+	local TitleTwo = Frame.TitleTwo 
+
+	-- [[ Answers ]] --
+	local Answers = Frame.Answers 
+	local AnswerOne = Answers.AnswerOne
+	local AnswerTwo = Answers.AnswerTwo
+	local AnswerThree = Answers.AnswerThree
+	local AnswerFour = Answers.AnswerFour
+	
+
+	local function CheckAnswers() 
+		local blank = false 
+		
+		--[[ Check Blanks ]]--
+		if AnswerOne.Text == "" then 
+			blank = true 
+		end
+		if AnswerTwo.Text == "" then 
+			blank = true 
+		end
+		if AnswerThree.Text == "" then 
+			blank = true 
+		end
+		if AnswerFour.Text == "" then 
+			blank = true 
+		end
+		return blank 
+	end 
+	
+
+
+	
+	local debounce = false 
+	Submit.Activated:Connect(function()
+		if not debounce then
+			debounce = true 
+			
+			
+			
+			
+		end
+	end)
 	
 end
 
