@@ -501,7 +501,7 @@ function controller.OnQuery()
 					TweenBase(Submit, 1, "TextTransparency", 1)
 					TweenBase(Submit, 1, "BackgroundTransparency", 1)
 
-					Title.Text = "Answer Locked in: " 
+					Title.Text = "Answer Locked in." 
 					TweenBase(Title, 1, "TextColor3", Color3.fromRGB(181, 218, 177))
 
 					for _,newv in(Frame.Answers:GetChildren()) do
