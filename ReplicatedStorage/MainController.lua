@@ -775,7 +775,6 @@ function controller.ServerAdapter()
 			local random = math.random(1, #fold)
 			local map = fold[random]
 
---[[
 			remote:FireAllClients("SendNotification", "Map", "The map for this game will be: " .. map.Name)
 
 			task.wait(3)
@@ -810,13 +809,14 @@ function controller.ServerAdapter()
 			remote:FireAllClients("SendNotification", "Questions", "Last Question knocked out!")
 			task.wait(2)
 			remote:FireAllClients("SendNotification", "Game Start", "The game will be starting now.")
-			]]
+			
 
 			TweenBase(game.Lighting.ScreenEffects, 2, "Brightness", -1)
 
 			local newmap = map:Clone() 
 			newmap.Parent = workspace 
-
+			
+			task.wait(1)
 
 			for _,v in(workspace:GetChildren()) do 
 				if v:FindFirstChild("Humanoid") and not v:GetAttribute("Ignored") then 
@@ -938,10 +938,10 @@ function controller.ServerAdapter()
 	remote.OnServerEvent:Connect(function(player, Action, Computer)
 		if Action == "RespondToComputer" then 
 			print(Computer)
-			if Computer then 
+			
 				for _,v in(workspace:GetDescendants()) do 
 					if v.Name == Computer then 
-						if not Computer:GetAttribute("Health") then 
+						if Computer:GetAttribute("Health") then 
 							v:SetAttribute("Health", v:GetAttribute("Health") - 1)
 						else 
 							v:SetAttribute("Health", 3)
@@ -949,14 +949,12 @@ function controller.ServerAdapter()
 
 						if v:GetAttribute("Health") == 0 then 
 							game.ReplicatedStorage.GameInformation.Computers.Value -= 1 
-
 							if game.ReplicatedStorage.GameInformation.Computers.Value == 0 then 
 								-- WIN HERE 
 							end
 
 						end
 
-					end
 				end
 			end
 		end
