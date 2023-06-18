@@ -215,31 +215,11 @@ function controller:AddQuery()
 				end)
 			else 
 				--/Assume that all of them are not blank 
-				local Question = Instance.new("Folder")
-				Question.Parent = game.ReplicatedStorage.MainController.Questions
-				Question.Name = Input.Text 
 
-				--[[ Create Answers for the questions ]] --  
-				local Answer1 = Instance.new("BoolValue")
-				Answer1.Parent = Question 
-				Answer1.Name = AnswerOne.Text 
-				Answer1.Value = true 
-				-- 
-				local Answer2 = Instance.new("BoolValue")
-				Answer2.Parent = Question 
-				Answer2.Name = AnswerTwo.Text 
-				Answer2.Value = false 
-				-- 
-				local Answer3 = Instance.new("BoolValue")
-				Answer3.Parent = Question 
-				Answer3.Name = AnswerThree.Text
-				Answer3.Value = false  
-				-- 
-				local Answer4 = Instance.new("BoolValue")
-				Answer4.Parent = Question
-				Answer4.Name = AnswerFour.Text
-				Answer4.Value = false 
+				remote:FireServer("CreateQuestion", Input.Text, AnswerOne.Text, AnswerTwo.Text, AnswerThree.Text, AnswerFour.Text)
 
+				repeat TitleTwo.Text = "Question pending..." task.wait(.5) until game.ReplicatedStorage.MainController.Questions:FindFirstChild(Input.Text)
+				
 				TitleTwo.Text = "Question successfully created!"
 				TitleTwo.TextColor3 = Color3.fromRGB(134, 255, 134)
 
@@ -412,7 +392,7 @@ function controller.OnQuery()
 
 			local Selects = false 
 			local CanSelect = true 
-			
+
 			Countdown.Value.Value = 15 
 			-- 
 			Countdown.Text = Countdown.Value.Value
@@ -436,10 +416,10 @@ function controller.OnQuery()
 				TweenBase(Submit, 1, "TextTransparency", 1)
 				TweenBase(Submit, 1, "BackgroundTransparency", 1)
 				--task.delay(1, function() Submit.Visible = false end)
-				
+
 				TweenBase(Countdown, .5, "BackgroundTransparency", 1)
 				TweenBase(Countdown, .7, "TextTransparency", 1)
-				
+
 				TweenBase(Question, 1, "TextColor3", Color3.fromRGB(73, 218, 206))
 
 
@@ -451,7 +431,7 @@ function controller.OnQuery()
 						answer = v.Name 
 					end
 				end
-				
+
 				task.wait(1)
 				Question.Text = "The correct answer is: " .. answer 
 				TweenBase(Question, 1, "TextColor3", Color3.fromRGB(75, 218, 87))
@@ -501,7 +481,7 @@ function controller.OnQuery()
 					TweenBase(Submit, 1, "TextTransparency", 1)
 					TweenBase(Submit, 1, "BackgroundTransparency", 1)
 
-					Title.Text = "Answer Locked in." 
+					Title.Text = "Answer Locked in: " 
 					TweenBase(Title, 1, "TextColor3", Color3.fromRGB(181, 218, 177))
 
 					for _,newv in(Frame.Answers:GetChildren()) do
@@ -527,8 +507,42 @@ function controller.OnQuery()
 end
 
 --//@Server Module Identifiers 
+
+function controller.ServerAdapter() 
+	remote.OnServerEvent:Connect(function(player, Action, QuestionText, AnswerOne, AnswerTwo, AnswerThree, AnswerFour)
+		if Action == "CreateQuestion" then 
+			local Question = Instance.new("Folder")
+			Question.Parent = game.ReplicatedStorage.MainController.Questions
+			Question.Name = QuestionText
+
+			--[[ Create Answers for the questions ]] --  
+			local Answer1 = Instance.new("BoolValue")
+			Answer1.Parent = Question 
+			Answer1.Name = AnswerOne 
+			Answer1.Value = true 
+			-- 
+			local Answer2 = Instance.new("BoolValue")
+			Answer2.Parent = Question 
+			Answer2.Name = AnswerTwo
+			Answer2.Value = false 
+			-- 
+			local Answer3 = Instance.new("BoolValue")
+			Answer3.Parent = Question 
+			Answer3.Name = AnswerThree
+			Answer3.Value = false  
+			-- 
+			local Answer4 = Instance.new("BoolValue")
+			Answer4.Parent = Question
+			Answer4.Name = AnswerFour
+			Answer4.Value = false 
+		end
+	end)
+end
+
 function controller:QueryPlayer(player, question)
 	remote:FireClient(player, "QueryPlayer", question)
 end 
+
+
 
 return controller
