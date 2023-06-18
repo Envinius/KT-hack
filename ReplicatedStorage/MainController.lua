@@ -628,9 +628,9 @@ function controller.ClientListener()
 
 			game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Visible = true 
 			Countdown.Visible = true 
-			
+
 			Countdown.Value.Value = Duration 
-			
+
 			coroutine.wrap(function() 
 				repeat 
 					Countdown.Value.Value -= 1 
@@ -654,9 +654,29 @@ function controller.ClientListener()
 				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.CapturedFrame.Visible = false 
 				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.CapturedFrame.Text.Visible = false 
 			end)
-
-
 		end
+
+
+		if Action == "ComputerToggle" then 
+			local Victim = Header 
+
+			coroutine.wrap(function()
+				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Text.Text = game.ReplicatedStorage.GameInformation.Computers.Value .. " computers left"
+				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Visible = true 
+				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Text.Visible = true 
+
+				repeat 
+					game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Text.Text = game.ReplicatedStorage.GameInformation.Computers.Value .. " computers left"
+					task.wait(1)
+				until game.ReplicatedStorage.GameInformation.Computers.Value == 0 
+
+				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Visible = false 
+				game.Players.LocalPlayer.PlayerGui.GameFrame.MainFrame.Computers.Text.Visible = false 
+
+			end)()
+		end 
+
+
 
 	end)
 end
@@ -857,8 +877,11 @@ function controller.ServerAdapter()
 			chosenKiller:PivotTo(newmap.KillerSpawn.CFrame + Vector3.new(0,3,0))
 
 			game.ReplicatedStorage.GameInformation.Killer.Value = chosenKiller.Name 
-			task.wait(2)
+			game.ReplicatedStorage.GameInformation.Computers.Value = 5 
+
+			task.wait(3)
 			remote:FireAllClients("GameCountdown", 600)
+			remote:FireAllClients("ComputerToggle", true)
 
 		end
 	end)
@@ -923,16 +946,16 @@ function controller.ServerAdapter()
 						else 
 							v:SetAttribute("Health", 3)
 						end 
-						
+
 						if v:GetAttribute("Health") == 0 then 
 							game.ReplicatedStorage.GameInformation.Computers.Value -= 1 
-							
+
 							if game.ReplicatedStorage.GameInformation.Computers.Value == 0 then 
 								-- WIN HERE 
 							end
-							
+
 						end
-						
+
 					end
 				end
 			end
